@@ -1,5 +1,6 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
+const objectId = require('mongodb').objectId;
 const cors = require('cors');
 require('dotenv').config();
 
@@ -24,20 +25,40 @@ async function run() {
         await client.connect();
         const database = client.db('tourismSite');
         const packagesCollection = database.collection('packages');
+        //Get API
+        app.get('/packages', async (req, res) => {
+            const cursor = packagesCollection.find({});
+            const packages = await cursor.toArray();
+            res.send(packages);
+        })
+
+        //Get single packages
+        app.get('/packages/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId };
+            const package = await packagesCollection.findOne(query);
+            res.json(package);
+        })
 
         // Post API
         app.post('/packages', async (req, res) => {
+            const package = req.body;
+            console.log('hit the post api', package);
 
-            console.log('hit the post api');
 
-            const package = {
 
-            }
+            const result = await packagesCollection.insertOne(package);
+            console.log(result);
+            res.json(result);
 
-            // const result = await packagesCollection.insertOne(package);
-            // console.log(result);
-            res.send('post hitted');
+        })
 
+        //Delete API
+        app.delete('/packages/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await packagesCollection.deleteOne(query);
+            res.json(result);
         })
 
     }
