@@ -14,16 +14,16 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-async function run(){
-    try{
+async function run() {
+    try {
         await client.connect();
         const database = client.db('tourismSite');
         const packagesCollection = database.collection('packages');
 
         // Post API
-        app.post('/packages', async(req, res) =>{
+        app.post('/packages', async (req, res) => {
 
-            const package ={
+            const package = {
                 "name": "Visit Sylhet",
                 "place": "Sylhet",
                 "price": "10,000"
@@ -33,19 +33,19 @@ async function run(){
             console.log(result);
 
         })
-        
+
     }
-    finally{
+    finally {
         // await client.close();
     }
 }
 
 run().catch(console.dir);
 
-app.get('/', (req, res) =>{
+app.get('/', (req, res) => {
     res.send('running tourism site');
 });
 
-app.listen(port, () =>{
+app.listen(port, () => {
     console.log('lets go to picnic', port);
 })
