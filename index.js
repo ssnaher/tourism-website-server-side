@@ -1,9 +1,14 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
+const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
 const port = 5000;
+
+//middleware
+app.use(cors());
+app.use(express.json());
 // user: toursimSite
 // pass: z0FhMUl48PQAiAsl
 
@@ -23,14 +28,15 @@ async function run() {
         // Post API
         app.post('/packages', async (req, res) => {
 
+            console.log('hit the post api');
+
             const package = {
-                "name": "Visit Sylhet",
-                "place": "Sylhet",
-                "price": "10,000"
+
             }
 
-            const result = await packagesCollection.insertOne(package);
-            console.log(result);
+            // const result = await packagesCollection.insertOne(package);
+            // console.log(result);
+            res.send('post hitted');
 
         })
 
